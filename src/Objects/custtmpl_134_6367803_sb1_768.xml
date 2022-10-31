@@ -1,0 +1,9 @@
+<advancedpdftemplate scriptid="custtmpl_134_6367803_sb1_768" standard="STDTMPLEMPTY">
+  <description></description>
+  <displaysourcecode>T</displaysourcecode>
+  <isinactive>F</isinactive>
+  <preferred>F</preferred>
+  <printtype>TRANSACTION</printtype>
+  <title>EFX FE - Payment Template MANCHESTER copy</title>
+  <trantype>CUSTPYMT</trantype>
+</advancedpdftemplate>

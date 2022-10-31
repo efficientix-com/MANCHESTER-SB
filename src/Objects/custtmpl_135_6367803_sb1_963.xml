@@ -1,0 +1,9 @@
+<advancedpdftemplate scriptid="custtmpl_135_6367803_sb1_963" standard="STDTMPLEMPTY">
+  <description></description>
+  <displaysourcecode>T</displaysourcecode>
+  <isinactive>F</isinactive>
+  <preferred>F</preferred>
+  <printtype>TRANSACTION</printtype>
+  <title>EFX FE - Credit Memo Template Manchester copy</title>
+  <trantype>CUSTCRED</trantype>
+</advancedpdftemplate>
