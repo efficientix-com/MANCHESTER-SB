@@ -1,6 +1,14 @@
 <?xml version="1.0"?><!DOCTYPE pdf PUBLIC "-//big.faceless.org//report" "report-1.1.dtd">
 <pdf>
+    <#setting locale = "es_MX">
+    <#setting time_zone= "America/Mexico_City">
+    <#setting number_format=",##0.00">
+
+    <#assign "dataXML" = "">
     <#if custom?has_content>
+        <#if custom.dataXML?has_content>
+            <#assign dataXML = custom.dataXML>
+        </#if>
         <#setting locale=custom.locale>
         <#assign labels = custom.labels>
         <#if custom.certData?has_content>
@@ -53,33 +61,36 @@
             <macro id="nlheader">
                 <table class="header" style="width: 100%;">
                     <tr>
-                        <td colspan="6" rowspan="3">
-                            <#if certData?has_content>
+                        <#if certData?has_content>
+                            <td colspan="6" rowspan="3">
                                 <#if record.custbody_efx_fe_logosub?has_content>
-                                    <img height="25%" src="${record.custbody_efx_fe_logosub}" style="float: left; margin: 2px" width="25%" />
+                                    <img height="25%" src="${record.custbody_efx_fe_logosub}" style="float: left; margin: 10px" width="25%" />
                                 </#if>
-                            <#else>
+                            </td>
+                        <#else>
+                            <td colspan="6" rowspan="3">
                                 <#if record.custbody_efx_fe_logosub?has_content>
                                     <#if subsidiary.logo@url?length != 0>
-                                        <img height="25%" src="${subsidiary.logo@url}" style="float: left; margin: 2px" width="25%" />
+                                        <img height="25%" src="${subsidiary.logo@url}" style="float: left; margin: 10px" width="25%" />
                                     <#elseif companyInformation.logoUrl?length != 0>
-                                        <img height="25%" src="${companyInformation.logoUrl}" style="float: left; margin: 2px" width="25%" />
+                                        <img height="25%" src="${companyInformation.logoUrl}" style="float: left; margin: 10px" width="25%" />
                                     </#if>
                                 </#if>
-                            </#if>
-
-                        </td>
+                            </td>
+                        </#if>
                         <td colspan="6" rowspan="3">
-                            <span class="nameandaddress" style="font-size: 9px; width: 40%;" >${subsidiary.mainaddress_text?upper_case}</span>
+                            <#if certData?has_content>
+                                <span class="nameandaddress" style="font-size: 9px; width: 40%;" >${record.custbody_efx_fe_dirsubs?upper_case?keep_before("UNDEFINED")}</span>
+                                <span class="nameandaddress" style="font-size: 9px; width: 40%;" >${record.subsidiary.custrecord_mx_sat_industry_type?upper_case}</span><br />
+                            </#if>
+                            <span class="nameandaddress" style="font-size: 9px; width: 40%;" >${subsidiary.mainaddress_text?upper_case}</span><br />
+                            <span class="nameandaddress" style="font-size: 9px; width: 40%;" >${subsidiary.custrecord_mx_sat_industry_type?upper_case}</span>
                         </td>
                         <td colspan="2" style="width: 21px;">&nbsp;</td>
                         <td colspan="4" style="font-size: 10px;" align="right">
                             <span style="font-size: 12px;"><strong>NOTA DE CRÉDITO</strong></span><br />
                             <span class="number" style="font-size: 18px;">${record.tranid}</span><br /> <br />
                             Fecha y hora de emisi&oacute;n<br />${record.createdDate}<br />
-                        </td>
-                        <td align="right">
-                            <span class="number"><!--#${record.tranid}--></span>
                         </td>
                     </tr>
                 </table>
@@ -210,17 +221,15 @@
 
         <table class="body" style="width: 100%; margin-top: 10px;">
             <tr>
-                <th colspan="3">Términos de crédito</th>
-                <th colspan="3">Factura</th>
-                <th colspan="3">No. de Pedido</th>
-                <th colspan="3">No. Cita</th>
+                <th colspan="4">Términos de crédito</th>
+                <th colspan="4">Factura</th>
+                <th colspan="4">No. de Pedido</th>
                 <th colspan="6">Concepto de devoluci&oacute;n</th>
             </tr>
             <tr>
-                <td colspan="3" style="font-size:10px;">${record.entity.terms}</td>
-                <td colspan="3" style="font-size:10px;">${record.createdfrom?keep_after("#")}</td>
-                <td colspan="3" style="font-size:10px;">${record.otherrefnum}</td>
-                <td colspan="3" style="font-size:10px;">${record.custbody_efx_cmp_no_cita}</td>
+                <td colspan="4" style="font-size:10px;">${record.entity.terms}</td>
+                <td colspan="4" style="font-size:10px;">${record.createdfrom?keep_after("#")}</td>
+                <td colspan="4" style="font-size:10px;">${record.otherrefnum}</td>
                 <td colspan="6" style="font-size:10px;">${record.custbody_efx_cmp_motivo_devolucion}</td>
             </tr>
         </table>
@@ -236,11 +245,11 @@
                             <tr>
                                 <th align="left" colspan="2" style="font-size: 6pt;">P</th>
                                 <th colspan="4" style="font-size: 5pt;">Código</th>
+                                <th align="left" colspan="4" style="font-size: 5pt;">UPC</th>
                                 <th colspan="5" style="font-size: 5pt;">Código<br/>Clave</th>
                                 <th colspan="18" style="font-size: 5pt;">Descripción</th>
                                 <th align="center" colspan="3" style="font-size: 5pt;">Clave<br/>SAT</th>
                                 <th align="left" colspan="2" style="font-size: 5pt;">Unidad</th>
-                                <th align="left" colspan="4" style="font-size: 5pt;">UPC</th>
                                 <th align="left" colspan="4" style="font-size: 5pt;">Cant.</th>
                                 <th align="center" colspan="4" style="font-size: 5pt;">Precio<br/>sin impuesto</th>
                                 <th align="left" colspan="4" style="font-size: 5pt;">Impuesto</th>
@@ -256,6 +265,7 @@
                         </#if>
                         <td align="center" colspan="2" line-height="150%" style="border-left: 1px; border-color: #e3e3e3;font-size: 5pt;">${item_index + 1}</td>
                         <td align="center" colspan="4" line-height="150%" style="border-left: 1px; border-color: #e3e3e3;font-size: 5pt;">${item.item?keep_before(" ")}</td>
+                        <td colspan="4" style="border-left: 1px; border-color: #e3e3e3;font-size: 5pt;">${item.custcol_efx_fe_upc_code}</td>
                         <td align="center" colspan="5" line-height="150%" style="border-left: 1px; border-color: #e3e3e3;font-size: 5pt;">${item.custcol_mx_txn_line_sat_item_code?keep_before(" ")}</td>
 
                         <td colspan="18" style="margin: 0; padding: 0;">
@@ -355,7 +365,6 @@
 
                         <td colspan="3" style="border-left: 1px; border-color: #e3e3e3;font-size: 5pt;">${units_sat}</td>
                         <td colspan="2" style="border-left: 1px; border-color: #e3e3e3;font-size: 5pt;">${item.units}</td>
-                        <td colspan="4" style="border-left: 1px; border-color: #e3e3e3;font-size: 5pt;">${item.custcol_efx_fe_upc_code}</td>
                         <td align="center" colspan="4" line-height="150%" style="border-left: 1px; border-color: #e3e3e3;font-size: 5pt;">${item.quantity}</td>
                         <td align="left" colspan="4" style="font-size: 5pt;">${item.rate}</td>
                         <td colspan="4" style="border-left: 1px; border-color: #e3e3e3;font-size: 5pt;">${item.tax1amt}</td>
@@ -379,11 +388,6 @@
                     <td align="left" colspan="2" style="border-bottom: 1px; border-color: #e3e3e3; font-size: 7pt;"><strong>Cantidad con letra:</strong> ${record.custbody_efx_amount_in_words}</td>
                 </tr>
                 <tr>
-                    <td align="left" style="border-right: 1px; border-bottom: 1px; border-color: #e3e3e3; font-size: 7pt;"><strong>Elaboró:</strong> ${record.custbody_efx_cmp_elaboro}</td>
-                    <td align="left" style="border-bottom: 1px; border-color: #e3e3e3; font-size: 7pt;"><strong>Asesor:</strong> ${record.salesrep}</td>
-                </tr>
-                <tr>
-                    <td align="left" style="border-right: 1px; border-color: #e3e3e3; font-size: 7pt;"><strong>Línea de negocios:</strong> ${record.cseg_efx_cstsg_cana}</td>
                     <td align="left" style="font-size: 7pt;"><strong>Total de piezas: </strong>${total_piezas}</td>
                 </tr>
             </table>
@@ -485,50 +489,6 @@
                 </td>
             </tr>
         </table>
-
-        <#if record.custbody_mx_cfdi_uuid?has_content>
-            <table class="total" style="width: 100%; margin-top: 10px; border-left: 1px; border-color: #e3e3e3;">
-                <tr>
-                    <td style="background-color: #e3e3e3; color: #333333;font-weight: bold;">Información CFDI</td>
-                </tr>
-                <#if record.custbody_efx_fe_related_cfdi_json?has_content>
-                    <tr>
-                        <td style="border-left: 1px;border-right: 1px; border-color: #e3e3e3;font-size:90%;"><b>CFDI Relacionados</b><br/>${record.custbody_efx_fe_related_cfdi_json}</td>
-                    </tr>
-                </#if>
-                <#if record.custbody_mx_cfdi_uuid?has_content>
-                    <tr>
-                        <td style="border-left: 1px;border-right: 1px; border-color: #e3e3e3;font-size:90%;"><b>UUID</b><br/>${record.custbody_mx_cfdi_uuid}</td>
-                    </tr>
-                    <tr>
-                        <td style="border-left: 1px;border-right: 1px; border-color: #e3e3e3;font-size:90%;"><b>Cadena Original</b><br/>${record.custbody_mx_cfdi_cadena_original}</td>
-                    </tr>
-                    <tr>
-                        <td style="border-left: 1px;border-right: 1px; border-color: #e3e3e3;font-size:90%;"><b>Firma del CFDI</b><br/>${record.custbody_mx_cfdi_signature}</td>
-                    </tr>
-                    <tr>
-                        <td style="border-left: 1px;border-right: 1px; border-color: #e3e3e3;font-size:90%;"><b>Firma del SAT</b><br/>${record.custbody_mx_cfdi_sat_signature}</td>
-                    </tr>
-                    <tr>
-                        <td style="border-left: 1px;border-right: 1px; border-bottom: 1px; border-color: #e3e3e3;">
-                            <#if record.custbody_mx_cfdi_qr_code?has_content>
-                                <table align="left" style="width: 100%; margin-top: 10px;">
-                                    <tr>
-                                        <#assign qrcodeImage = "data:image/png;base64, " + record.custbody_mx_cfdi_qr_code >
-                                        <td align="center">
-                                            <img style="width: 100px;height:100px" src="${qrcodeImage}" />
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td align="center"></td>
-                                    </tr>
-                                </table>
-                            </#if>
-                        </td>
-                    </tr>
-                </#if>
-            </table>
-        </#if>
 
         <#if certData?has_content>
             <table class="total" style="width: 100%; margin-top: 10px; border-left: 1px; border-color: #e3e3e3;">
