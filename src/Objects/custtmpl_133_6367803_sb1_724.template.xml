@@ -29,7 +29,7 @@
         <#if customer.isperson == "T">
             <#assign customerName = customer.firstname + ' ' + customer.lastname>
         <#else>
-            <#assign "customerName" = customer.companyname>
+            <#assign customerName = customer.companyname>
         </#if>
         <#assign "summary" = custom.summary>
         <#assign "totalAmount" = summary.subtotal - summary.totalDiscount>
@@ -90,10 +90,16 @@
                                     </#if>
                                 </#if>
                             </#if>
-
                         </td>
                         <td colspan="6" rowspan="3">
-                            <span class="nameandaddress" style="font-size: 9px; width: 40%;" ><#if record.custbody_efx_fe_info_location_pdf == true>${record.custbody_efx_fe_dirloc}<#else>${record.custbody_efx_fe_dirsubs} <br /> ${subsidiary.federalidnumber}</#if></span>
+                            <span class="nameandaddress" style="font-size: 9px; width: 40%;" >
+                                <#if record.custbody_efx_fe_info_location_pdf == true>
+                                    ${record.custbody_efx_fe_dirloc}
+                                <#else>
+                                    ${record.custbody_efx_fe_dirsubs?keep_before_last("<br />")} <br />
+                                    RFC
+                                </#if>
+                            </span>
                         </td>
                         <td colspan="2" style="width: 21px;">&nbsp;</td>
                         <td colspan="4" style="font-size: 10px;" align="right"><span style="font-size: 12px;"><strong>FACTURA</strong></span><br />
@@ -264,7 +270,10 @@
                     <td class="body" colspan="14" style="background-color: #e3e3e3; font-size:12px"><b>Lugar de entrega</b></td>
                 </tr>
                 <tr>
-                    <td colspan="14" rowspan="2" style="border: 1px; border-color: #e3e3e3; font-size:9px;">${record.custbody_efx_fe_kiosko_name}<br/>${record.billaddress?upper_case}<br/>RFC: ${record.custbody_efx_fe_kiosko_rfc?upper_case}<br/></td>
+                    <td colspan="14" rowspan="2" style="border: 1px; border-color: #e3e3e3; font-size:9px;">
+                        ${record.custbody_efx_fe_kiosko_name}<br/>
+                        ${record.billaddress?upper_case}<br/>
+                        RFC: ${record.custbody_efx_fe_kiosko_rfc?upper_case}<br/></td>
                     <td></td>
                     <td align="left" colspan="14" style="border: 1px; border-color: #e3e3e3; font-size:9px;">${record.billaddress?keep_after(" />")?upper_case} </td>
                 </tr>
@@ -277,7 +286,9 @@
                     <td class="body" colspan="14" style="background-color: #e3e3e3; font-size:9px"><b>Lugar de entrega</b></td>
                 </tr>
                 <tr>
-                    <td colspan="14" rowspan="2" style="border: 1px; border-color: #e3e3e3; font-size:9px;">${record.entity.companyname?upper_case}<br/>${record.shipaddress?upper_case}<br/>RFC: ${record.custbody_mx_customer_rfc?upper_case}<br/></td>
+                    <td colspan="14" rowspan="2" style="border: 1px; border-color: #e3e3e3; font-size:9px;">
+                        ${record.entity.custentity_mx_rfc?upper_case}<br/>
+                        RFC: ${record.custbody_mx_customer_rfc?upper_case}<br/></td>
                     <td></td>
                     <td align="left" colspan="14" style="border: 1px; border-color: #e3e3e3; font-size:9px;">${record.shipaddress?keep_after(" />")?upper_case} </td>
                 </tr>
