@@ -117,12 +117,22 @@
 
                         </td>
                         <td colspan="1">&nbsp;</td>
+
                         <td colspan="6" align="center">
-
-                            <span class="nameandaddress"
-                                  style="font-size: 9px;"><#if record.custbody_efx_fe_gbl_diremisor?has_content>${record.custbody_efx_fe_gbl_diremisor}<#else><#if record.custbody_efx_fe_info_location_pdf == true>${record.custbody_efx_fe_dirloc}<#else>${record.custbody_efx_fe_dirsubs}</#if></#if></span>
-
+                            <span class="nameandaddress" style="font-size: 9px;">
+                                <#if record.custbody_efx_fe_gbl_diremisor?has_content>
+                                    ${record.custbody_efx_fe_gbl_diremisor}
+                                <#else>
+                                    <#if record.custbody_efx_fe_info_location_pdf == true>
+                                        ${record.custbody_efx_fe_dirloc}
+                                    <#else>
+                                        ${record.custbody_efx_fe_dirsubs}<br />
+                                        ${record.subsidiary.custrecord_mx_sat_industry_type}
+                                    </#if>
+                                </#if>
+                            </span>
                         </td>
+
                         <td colspan="1">&nbsp;</td>
                         <td colspan="4" style="font-size: 10px;" align="right"><span style="font-size: 12px;"><strong>FACTURA</strong></span><br/>
                             <#if dataXML?has_content>
@@ -420,7 +430,7 @@
                     </td>
                 <#else>
                     <td colspan="14" rowspan="2" style="border: 1px; border-color: #e3e3e3; font-size:9px;">
-                        ${record.customer.altname}<br/><br/>
+                        ${record.entity.custentity_tkiio_razon_social}<br/><br/>
                         <b>RFC:</b> <#outputformat "XML">${record.custbody_mx_customer_rfc?upper_case}</#outputformat><br/><br/>
                         ${record.entity.entityid}
                     </td>
@@ -436,26 +446,26 @@
     <table class="body" style="width: 100%; margin-top: 9px;">
         <tr>
             <th colspan="3">Condiciones de Pago:</th>
-            <th colspan="3">Tipo de Cambio</th>
-            <th colspan="3">Moneda</th>
+            <th colspan="3">Referencia Cliente:</th>
+            <th colspan="3">Orden de Venta</th>
             <th colspan="3">No. de pedido</th>
             <th colspan="3">Poliza de seguro</th>
 
         </tr>
         <tr>
             <td colspan="3" style="font-size:9px;">${record.entity.terms}</td>
-            <td colspan="3" style="font-size:9px;">${record.exchangerate?string["0.00"]}</td>
-            <td colspan="3" style="font-size:9px;">${record.currency.symbol}</td>
+            <td colspan="3" style="font-size:9px;">${record.entity.entityid}</td>
+            <td colspan="3" style="font-size:9px;">${record.createdfrom}</td>
             <td colspan="3" style="font-size:9px;">${record.otherrefnum}</td>
             <td colspan="3" style="font-size:9px;">${record.subsidiary.custrecord_tkio_pol_seguro_sub}</td>
 
         </tr>
-        <!--<tr>
-<th colspan= "18" style="width: 100%;">Comentarios</th>
-</tr>
-<tr>
-<td colspan= "18" style="width: 100%; font-size:10px;">${record.memo}</td>
-</tr>-->
+        <!--
+            Se arregló lo sig:
+            - el regimen fiscal de la subsi
+            - el nombre del cliente no aparece en la impresora (OPCIONAL)
+            - se quitó tipo de cambio y moneda para poner ref cli y orden de venta
+        -->
     </table>
 
     <#assign "line_discount"= 0>
