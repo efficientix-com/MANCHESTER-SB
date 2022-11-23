@@ -2,7 +2,7 @@
 <pdf>
     <#setting locale = "es_MX">
     <#setting time_zone= "America/Mexico_City">
-    <#setting number_format=",##0.00">
+    <#--  <#setting number_format=",##0.00">  -->
 
     <#assign "dataXML" = "">
     <#if custom?has_content>
@@ -363,9 +363,10 @@
                     <td class="body" colspan="14" style="background-color: #e3e3e3; font-size:9px"><b>Domicilio Fiscal</b></td>
                 </tr>
                 <tr>
-                    <td colspan="14" rowspan="2"
-                        style="border: 1px; border-color: #e3e3e3; font-size:9px;">${dataXML.Receptor.atributos.Nombre}
-                        <br/><br/><b>RFC:</b> <#outputformat "XML">${dataXML.Receptor.atributos.Rfc}</#outputformat><br/></td>
+                    <td colspan="14" rowspan="2" style="border: 1px; border-color: #e3e3e3; font-size:9px;">
+                        ${dataXML.Receptor.atributos.Nombre}<br/><br/>
+                        <b>RFC:</b> <#outputformat "XML">${dataXML.Receptor.atributos.Rfc}</#outputformat><br/><br/>
+                    </td>
                     <td></td>
 
                     <td align="left" colspan="14"
@@ -377,19 +378,20 @@
                 <tr>
                     <td class="body" colspan="14" style="background-color: #e3e3e3; font-size:9px;"><b>Cliente</b></td>
                     <td></td>
-                    <td class="body" colspan="14" style="background-color: #e3e3e3; font-size:9px"><b>Domicilio Fiscal</b></td>
+                    <td class="body" colspan="14" style="background-color: #e3e3e3; font-size:9px"><b>Lugar de entrega</b></td>
                 </tr>
                 <tr>
                     <td colspan="14" rowspan="2" style="border: 1px; border-color: #e3e3e3; font-size:9px;">
-                        ${dataXML.Receptor.atributos.Nombre}<br/><br/>
+                        <#--  ${dataXML.Receptor.atributos.Nombre}<br/><br/>  -->
+                        ${record.billaddress?keep_after("<br />")}<br/><br/>
                         <b>RFC:</b> <#outputformat "XML">${dataXML.Receptor.atributos.Rfc}</#outputformat><br/><br/>
                         ${record.entity.entityid}
                     </td>
                     <td></td>
 
 
-                    <td align="left" colspan="14"
-                        style="border: 1px; border-color: #e3e3e3; font-size:9px;">${record.billaddress?keep_after(" />")?upper_case} </td>
+                    <td align="left" colspan="14" style="border: 1px; border-color: #e3e3e3; font-size:9px;">${record.shipaddress?keep_after(" />")?upper_case} </td>
+                    <#--  <td align="left" colspan="14" style="border: 1px; border-color: #e3e3e3; font-size:9px;">${record.billaddress?keep_after(" />")?upper_case} </td>  -->
                 </tr>
             </table>
         </#if>
@@ -419,12 +421,13 @@
                 <tr>
                     <td class="body" colspan="14" style="background-color: #e3e3e3; font-size:9px;"><b>Cliente</b></td>
                     <td></td>
-                    <td class="body" colspan="14" style="background-color: #e3e3e3; font-size:9px"><b>Domicilio Fiscal</b></td>
+                    <td class="body" colspan="14" style="background-color: #e3e3e3; font-size:9px"><b>Lugar de entrega</b></td>
                 </tr>
                 <tr>
                 <#if record.entity.custentity_mx_sat_registered_name?has_content>
                     <td colspan="14" rowspan="2" style="border: 1px; border-color: #e3e3e3; font-size:9px;">
-                        ${record.entity.custentity_mx_sat_registered_name}<br/><br/>
+                        <#--  ${record.entity.custentity_mx_sat_registered_name}<br/><br/>  -->
+                        ${record.billaddress?keep_before("<br/>")}<br/><br/>
                         <b>RFC:</b> <#outputformat "XML">${record.custbody_mx_customer_rfc?upper_case}</#outputformat><br/><br />
                         ${record.entity.entityid}
                     </td>
@@ -437,7 +440,7 @@
                 </#if>
                 <td></td>
 
-                <td align="left" colspan="14" style="border: 1px; border-color: #e3e3e3; font-size:9px;">${record.billaddress?keep_after(" />")?upper_case} </td>
+                <td align="left" colspan="14" style="border: 1px; border-color: #e3e3e3; font-size:9px;">${record.shipaddress?keep_after(" />")?upper_case} </td>
                 </tr>
             </table>
         </#if>
@@ -448,6 +451,7 @@
             <th colspan="3">Condiciones de Pago:</th>
             <th colspan="3">Referencia Cliente:</th>
             <th colspan="3">Orden de Venta</th>
+            <th colspan="3">No. Vendedor</th>
             <th colspan="3">No. de pedido</th>
             <th colspan="3">Poliza de seguro</th>
 
@@ -456,6 +460,7 @@
             <td colspan="3" style="font-size:9px;">${record.entity.terms}</td>
             <td colspan="3" style="font-size:9px;">${record.entity.entityid}</td>
             <td colspan="3" style="font-size:9px;">${record.createdfrom}</td>
+            <td colspan="3" style="font-size:9px;">${record.salesrep}</td>
             <td colspan="3" style="font-size:9px;">${record.otherrefnum}</td>
             <td colspan="3" style="font-size:9px;">${record.subsidiary.custrecord_tkio_pol_seguro_sub}</td>
 
@@ -486,70 +491,88 @@
         <table class="itemtable" style="width: 100%; margin-top: 3px; border: 1px; border-color: #e3e3e3;">
             <#if dataXML.Conceptos.Concepto?is_sequence>
                 <thead>
-                <tr style="margin-top: 0px; padding-top: 0px; padding-bottom: 0px">
-                    <th align="center" colspan="2"
-                        style="font-size: 5pt; padding-left: 0px; padding-right: 0px;">Partida
-                    </th>
-                    <th align="center" colspan="5"
-                        style="font-size: 5pt; padding-left: 0px; padding-right: 0px;">Código<br/>Clave
-                    </th>
-                    <th align="center" colspan="5"
-                        style="font-size: 5pt; padding-left: 0px; padding-right: 0px;">UPC
-                    </th>
-                    <th align="center" colspan="18"
-                        style="font-size: 5pt; padding-left: 0px; padding-right: 0px;">
-                        <table style="width: 100%; margin-top: 0px; margin-bottom: 0px; border: 1px; border-color: #e3e3e3">
-                            <tr>
-                                <th align="center" colspan="18"
-                                    style="font-size: 5pt; padding-top: 0px; padding-bottom: 2px; padding-left: 0px; padding-right: 0px;">
-                                    Descripción
-                                </th>
-                            </tr>
-                            <tr>
-                                <td colspan="18" style="border-left: 1px; border-color: #e3e3e3;">
-                                    <table style="width: 100%; margin-top: 0px; margin-bottom: 0px;">
-                                        <tr>
-                                        <td align="left" colspan="4"
-                                            style="font-size: 4pt; padding-top: 0px; padding-bottom: 0px;">Base:
-                                        </td>
-                                        <td align="left" colspan="3"
-                                            style="font-size: 4pt; padding-top: 0px; padding-bottom: 0px;">Factor:
-                                        </td>
-                                        <td align="left" colspan="3"
-                                            style="font-size: 4pt; padding-top: 0px; padding-bottom: 0px;">Tasa:
-                                        </td>
-                                        <td align="left" colspan="4"
-                                            style="font-size: 4pt; padding-top: 0px; padding-bottom: 0px;">Importe:
-                                        </td>
-                                        </tr>
-                                    </table>
-                                </td>
-                            </tr>
-                        </table>
-                    </th>
+                    <tr style="margin-top: 0px; padding-top: 0px; padding-bottom: 0px">
+                        <th align="center" colspan="2"
+                            style="font-size: 5pt; padding-left: 0px; padding-right: 0px;">Partida
+                        </th>
+                        <th align="center" colspan="4" style="font-size: 5pt; padding-left: 0px; padding-right: 0px;">
+                            SKU
+                        </th>
+                        <th align="center" colspan="5"
+                            style="font-size: 5pt; padding-left: 0px; padding-right: 0px;">Código<br/>Clave
+                        </th>
+                        <th align="center" colspan="5"
+                            style="font-size: 5pt; padding-left: 0px; padding-right: 0px;">UPC
+                        </th>
+                        <th align="center" colspan="18"
+                            style="font-size: 5pt; padding-left: 0px; padding-right: 0px;">
+                            <table style="width: 100%; margin-top: 0px; margin-bottom: 0px; border: 1px; border-color: #e3e3e3">
+                                <tr>
+                                    <th align="center" colspan="18"
+                                        style="font-size: 5pt; padding-top: 0px; padding-bottom: 2px; padding-left: 0px; padding-right: 0px;">
+                                        Descripción
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <td colspan="18" style="border-left: 1px; border-color: #e3e3e3;">
+                                        <table style="width: 100%; margin-top: 0px; margin-bottom: 0px;">
+                                            <tr>
+                                            <td align="left" colspan="4"
+                                                style="font-size: 4pt; padding-top: 0px; padding-bottom: 0px;">Base:
+                                            </td>
+                                            <td align="left" colspan="3"
+                                                style="font-size: 4pt; padding-top: 0px; padding-bottom: 0px;">Factor:
+                                            </td>
+                                            <td align="left" colspan="3"
+                                                style="font-size: 4pt; padding-top: 0px; padding-bottom: 0px;">Tasa:
+                                            </td>
+                                            <td align="left" colspan="4"
+                                                style="font-size: 4pt; padding-top: 0px; padding-bottom: 0px;">Importe:
+                                            </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        </th>
 
-                    <th align="center" colspan="4"
-                        style="font-size: 5pt; padding-left: 0px; padding-right: 0px;">Cantidad
-                    </th>
-                    <th align="center" colspan="2"
-                        style="font-size: 4pt; padding-left: 0px; padding-right: 0px;">Unidad
-                    </th>
-                    <th align="center" colspan="4"
-                        style="font-size: 5pt; padding-left: 0px; padding-right: 0px;">Precio sin<br/>impuesto
-                    </th>
-                    <th align="center" colspan="4"
-                        style="font-size: 5pt; padding-left: 0px; padding-right: 0px;">Importe
-                    </th>
-                    <th align="center" colspan="4"
-                        style="font-size: 5pt; padding-left: 0px; padding-right: 0px;">Descuento
-                    </th>
-                </tr>
+                        <th align="center" colspan="4"
+                            style="font-size: 5pt; padding-left: 0px; padding-right: 0px;">Cantidad
+                        </th>
+                        <th align="center" colspan="2"
+                            style="font-size: 4pt; padding-left: 0px; padding-right: 0px;">Unidad
+                        </th>
+                        <th align="center" colspan="4"
+                            style="font-size: 5pt; padding-left: 0px; padding-right: 0px;">Precio sin<br/>impuesto
+                        </th>
+                        <th align="center" colspan="4"
+                            style="font-size: 5pt; padding-left: 0px; padding-right: 0px;">Importe
+                        </th>
+                        <th align="center" colspan="4"
+                            style="font-size: 5pt; padding-left: 0px; padding-right: 0px;">Descuento
+                        </th>
+                    </tr>
                 </thead>
+                <#assign partida = 0>
+                <#assign skuObj = []>
+                <#list record.item as item>
+                    <#assign tipo_articulo = item.itemtype>
+                    <#if tipo_articulo != "Discount">
+                        <#assign skuObj = skuObj + [item.item]>
+                    </#if>
+                </#list>
+
                 <#list dataXML.Conceptos.Concepto as Conceptos>
                     <tr>
-                        <td align="center" colspan="2" line-height="150%"
-                            style="border-left: 0px; border-color: #e3e3e3;font-size: 5pt; padding-top: 1px;">${Conceptos_index+1?string["##0"]}
+                        <td align="center" colspan="2" line-height="150%" style="border-left: 0px; border-color: #e3e3e3;font-size: 5pt; padding-top: 1px;">${partida+1}
                         </td>
+                        <#if partida lt skuObj?size>
+                            <td align="center" colspan="5" line-height="150%" style="border-left: 1px; border-color: #e3e3e3;font-size: 5pt; padding:0;">${skuObj[partida]}</td>
+                        </#if>
+                        <#--  <#list record.item as item>
+                        <td align="center" colspan="5" line-height="150%"
+                            style="border-left: 1px; border-color: #e3e3e3;font-size: 5pt; padding:0;">${item.item}</td>
+                        </#list>  -->
                         <td align="center" colspan="5" line-height="150%"
                             style="border-left: 1px; border-color: #e3e3e3;font-size: 5pt; padding:0;">${Conceptos.atributos.ClaveProdServ}</td>
                         <td align="center" colspan="5"
@@ -676,13 +699,15 @@
                         <td align="center" colspan="4"
                             style="border-left: 1px; border-color: #e3e3e3;font-size: 5pt; padding-top: 1px; padding-left: 0px; padding-right: 0px;">${Conceptos.atributos.Descuento?number?string[",##0.00"]}</td>
                     </tr>
-
+                    <#assign partida = partida+1>
                 </#list>
             <#else>
                 <thead>
                 <tr style="margin-top: 0px; padding-top: 0px; padding-bottom: 0px">
                     <th align="center" colspan="2" style="font-size: 5pt; padding-left: 0px; padding-right: 0px;">
                         Partida
+                    </th>
+                    <th align="center" colspan="5" style="font-size: 5pt; padding-left: 0px; padding-right: 0px;">SKU
                     </th>
                     <th align="center" colspan="5" style="font-size: 5pt; padding-left: 0px; padding-right: 0px;">Código<br/>Clave
                     </th>
@@ -737,9 +762,17 @@
                 </tr>
                 </thead>
 
+                <#assign skuObj = []>
+                <#list record.item as item>
+                    <#assign tipo_articulo = item.itemtype>
+                    <#if tipo_articulo != "Discount">
+                        <#assign skuObj = skuObj + [item.item]>
+                    </#if>
+                </#list>
                 <tr>
                     <td align="center" colspan="2" line-height="150%" style="border-left: 0px; border-color: #e3e3e3;font-size: 5pt; padding-top: 1px;">1
                     </td>
+                    <td align="center" colspan="5" line-height="150%" style="border-left: 1px; border-color: #e3e3e3;font-size: 5pt; padding:0;">${skuObj[0]}</td>
                     <td align="center" colspan="5" line-height="150%"
                         style="border-left: 1px; border-color: #e3e3e3;font-size: 5pt; padding:0;">${dataXML.Conceptos.Concepto.atributos.ClaveProdServ}</td>
                     <td align="center" colspan="5"
@@ -872,65 +905,66 @@
 
     <#else>
         <table class="itemtable" style="width: 100%; margin-top: 3px; border: 1px; border-color: #e3e3e3;">
-            <#list record.item as item><#if item_index==0>
-                <thead>
-                <tr style="margin-top: 0px; padding-top: 0px; padding-bottom: 0px">
-                    <th align="center" colspan="2" style="font-size: 5pt; padding-left: 0px; padding-right: 0px;">
-                        Partida
-                    </th>
-                    <th align="center" colspan="4" style="font-size: 5pt; padding-left: 0px; padding-right: 0px;">
-                        Código
-                    </th>
-                    <th align="center" colspan="5" style="font-size: 5pt; padding-left: 0px; padding-right: 0px;">Código<br/>Clave
-                    </th>
-                    <th align="center" colspan="5" style="font-size: 5pt; padding-left: 0px; padding-right: 0px;">UPC
-                    </th>
-                    <th align="center" colspan="18" style="font-size: 5pt; padding-left: 0px; padding-right: 0px;">
-                        <table style="width: 100%; margin-top: 0px; margin-bottom: 0px; border: 1px; border-color: #e3e3e3">
-                            <tr>
-                                <th align="center" colspan="18"
-                                    style="font-size: 5pt; padding-top: 0px; padding-bottom: 2px; padding-left: 0px; padding-right: 0px;">
-                                    Descripción
-                                </th>
-                            </tr>
-                            <tr>
-                                <td align="left" colspan="4"
-                                    style="font-size: 4pt; padding-top: 0px; padding-bottom: 0px;">Base:
-                                </td>
-                                <td align="left" colspan="4"
-                                    style="font-size: 4pt; padding-top: 0px; padding-bottom: 0px; margin-top: 0px">
-                                    Impuesto:
-                                </td>
-                                <td align="left" colspan="3"
-                                    style="font-size: 4pt; padding-top: 0px; padding-bottom: 0px;">Factor:
-                                </td>
-                                <td align="left" colspan="3"
-                                    style="font-size: 4pt; padding-top: 0px; padding-bottom: 0px;">Tasa:
-                                </td>
-                                <td align="left" colspan="4"
-                                    style="font-size: 4pt; padding-top: 0px; padding-bottom: 0px;">Importe:
-                                </td>
-                            </tr>
-                        </table>
-                    </th>
+            <#list record.item as item>
+                <#if item_index==0>
+                    <thead>
+                        <tr style="margin-top: 0px; padding-top: 0px; padding-bottom: 0px">
+                            <th align="center" colspan="2" style="font-size: 5pt; padding-left: 0px; padding-right: 0px;">
+                                Partida
+                            </th>
+                            <th align="center" colspan="4" style="font-size: 5pt; padding-left: 0px; padding-right: 0px;">
+                                SKU
+                            </th>
+                            <th align="center" colspan="5" style="font-size: 5pt; padding-left: 0px; padding-right: 0px;">Código<br/>Clave
+                            </th>
+                            <th align="center" colspan="5" style="font-size: 5pt; padding-left: 0px; padding-right: 0px;">UPC
+                            </th>
+                            <th align="center" colspan="18" style="font-size: 5pt; padding-left: 0px; padding-right: 0px;">
+                                <table style="width: 100%; margin-top: 0px; margin-bottom: 0px; border: 1px; border-color: #e3e3e3">
+                                    <tr>
+                                        <th align="center" colspan="18"
+                                            style="font-size: 5pt; padding-top: 0px; padding-bottom: 2px; padding-left: 0px; padding-right: 0px;">
+                                            Descripción
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <td align="left" colspan="4"
+                                            style="font-size: 4pt; padding-top: 0px; padding-bottom: 0px;">Base:
+                                        </td>
+                                        <td align="left" colspan="4"
+                                            style="font-size: 4pt; padding-top: 0px; padding-bottom: 0px; margin-top: 0px">
+                                            Impuesto:
+                                        </td>
+                                        <td align="left" colspan="3"
+                                            style="font-size: 4pt; padding-top: 0px; padding-bottom: 0px;">Factor:
+                                        </td>
+                                        <td align="left" colspan="3"
+                                            style="font-size: 4pt; padding-top: 0px; padding-bottom: 0px;">Tasa:
+                                        </td>
+                                        <td align="left" colspan="4"
+                                            style="font-size: 4pt; padding-top: 0px; padding-bottom: 0px;">Importe:
+                                        </td>
+                                    </tr>
+                                </table>
+                            </th>
 
-                    <th align="center" colspan="4" style="font-size: 5pt; padding-left: 0px; padding-right: 0px;">
-                        Cantidad
-                    </th>
-                    <th align="center" colspan="2" style="font-size: 4pt; padding-left: 0px; padding-right: 0px;">
-                        Unidad
-                    </th>
-                    <th align="center" colspan="4" style="font-size: 5pt; padding-left: 0px; padding-right: 0px;">Precio
-                        sin<br/>impuesto
-                    </th>
-                    <th align="center" colspan="4"
-                        style="font-size: 5pt; padding-left: 0px; padding-right: 0px;">Importe</th>
-                    <th align="center" colspan="4" style="font-size: 5pt; padding-left: 0px; padding-right: 0px;">
-                        Descuento
-                    </th>
-                </tr>
-                </thead>
-            </#if>
+                            <th align="center" colspan="4" style="font-size: 5pt; padding-left: 0px; padding-right: 0px;">
+                                Cantidad
+                            </th>
+                            <th align="center" colspan="2" style="font-size: 4pt; padding-left: 0px; padding-right: 0px;">
+                                Unidad
+                            </th>
+                            <th align="center" colspan="4" style="font-size: 5pt; padding-left: 0px; padding-right: 0px;">Precio
+                                sin<br/>impuesto
+                            </th>
+                            <th align="center" colspan="4"
+                                style="font-size: 5pt; padding-left: 0px; padding-right: 0px;">Importe</th>
+                            <th align="center" colspan="4" style="font-size: 5pt; padding-left: 0px; padding-right: 0px;">
+                                Descuento
+                            </th>
+                        </tr>
+                    </thead>
+                </#if>
 
                 <#assign "tipo_articulo" = item.item?keep_before(" ")>
                 <#assign "line_number"= item_index + 1>
@@ -951,10 +985,10 @@
                                 style="border-left: 0px; border-color: #e3e3e3;font-size: 5pt; padding-top: 1px;">${line_number?string["##0"]}</td>
                             <td align="center" colspan="4" line-height="150%"
                                 style="border-left: 1px; border-color: #e3e3e3;font-size: 5pt; padding-top: 1px;">${item.item?keep_before(" ")}</td>
-                            <td align="center" colspan="5"
-                                style="border-left: 1px; border-color: #e3e3e3;font-size: 5pt; padding-top: 1px; padding-left: 0px; padding-right: 0px;">${item.custcol_efx_fe_upc_code}</td>
                             <td align="center" colspan="5" line-height="150%"
                                 style="border-left: 1px; border-color: #e3e3e3;font-size: 5pt; padding:0;">${item.custcol_mx_txn_line_sat_item_code?keep_before(" ")}</td>
+                            <td align="center" colspan="5"
+                                style="border-left: 1px; border-color: #e3e3e3;font-size: 5pt; padding-top: 1px; padding-left: 0px; padding-right: 0px;">${item.custcol_efx_fe_upc_code}</td>
 
                             <td colspan="18" style="margin: 0; padding: 0;">
                                 <table style="width: 100%">
@@ -1031,7 +1065,8 @@
                             <td align="center" colspan="4"
                                 style="border-left: 1px; border-color: #e3e3e3;font-size: 5pt; padding-top: 1px; padding-left: 0px; padding-right: 0px;">${item.amount}</td>
                             <td align="center" colspan="4"
-                                style="border-left: 1px; border-color: #e3e3e3;font-size: 5pt; padding-top: 1px; padding-left: 0px; padding-right: 0px;">${importe_discount[item_index+1]?number?string[",##0.00"]}</td>
+                                style="border-left: 1px; border-color: #e3e3e3;font-size: 5pt; padding-top: 1px; padding-left: 0px; padding-right: 0px;">$${importe_discount[item_index+1]?abs}</td>
+                                <#--  style="border-left: 1px; border-color: #e3e3e3;font-size: 5pt; padding-top: 1px; padding-left: 0px; padding-right: 0px;">${importe_discount[item_index+1]?number?string[",##0.00"]}</td>  -->
                             <#assign "descuento_total" = descuento_total + importe_discount[item_index+1]>
 
                         </#if>
@@ -1102,17 +1137,17 @@
             <td colspan="3" style="margin: 0px; padding: 0;">
                 <table style="width: 100%; margin-top: 0px; margin-left: 0px; border: 0px; border-color: #e3e3e3;">
                     <tr>
-                        <td colspan="1" style="font-size: 7pt; border-color: #e3e3e3;border-left: 1px; border-right: 2px; margin-right: 20px;"><b>Subtotal</b>
+                        <td colspan="1" style="font-size: 7pt; border-color: #e3e3e3;border-left: 1px;  margin-right: 5px;"><b>Subtotal</b>
                         </td>
                         <#if dataXML?has_content>
-                            <td align="left" colspan="1" style="font-size: 7pt;">${dataXML.atributos.SubTotal?number?string[",##0.00"]}</td>
+                            <td align="left" colspan="1" style="font-size: 7pt; margin-left: 10px;">$${(dataXML.atributos.SubTotal?number - dataXML.atributos.Descuento?number)?string[",##0.00"]}</td>
                         <#else>
                             <#if record.custbody_efx_fe_gbl_subtotal?has_content>
                                 <td align="left" colspan="1"
                                     style="font-size: 7pt;">${record.custbody_efx_fe_gbl_subtotal?number?string[",##0.00"]}</td>
                             <#else>
 
-                                <td align="left" colspan="1" style="font-size: 7pt;">${record.subtotal?string[",##0.00"]}</td>
+                                <td align="left" colspan="1" style="font-size: 7pt; margin-left: 10px;">$${record.subtotal?string[",##0.00"]}</td>
                             </#if>
                         </#if>
 
@@ -1121,14 +1156,14 @@
                         <td colspan="1" style="font-size: 7pt;  border-color: #e3e3e3;border-left: 1px;">
                             <b>Descuento</b></td>
                         <#if dataXML?has_content>
-                            <td align="right" colspan="1" style="font-size: 7pt;">${dataXML.atributos.Descuento?number?string[",##0.00"]}</td>
+                            <td align="right" colspan="1" style="font-size: 7pt;">$${dataXML.atributos.Descuento?number?string[",##0.00"]}</td>
                         <#else>
                             <#if descuento_total != 0>
                                 <td align="right" colspan="1"
-                                    style="font-size: 7pt;"><#if desglose_total_discount?has_content>${desglose_total_discount?number?string[",##0.00"]}</#if></td>
+                                    style="font-size: 7pt;"><#if desglose_total_discount?has_content>$${desglose_total_discount?number?string[",##0.00"]}</#if></td>
                             <#else>
                                 <#if record.discounttotal != 0>
-                                    <td align="right" colspan="1" style="font-size: 7pt;">${record.discounttotal}</td>
+                                    <td align="right" colspan="1" style="font-size: 7pt;">$${record.discounttotal}</td>
                                 <#else>
                                     <td align="right" colspan="1" style="font-size: 7pt;">0.00</td>
                                 </#if>
@@ -1137,17 +1172,17 @@
 
                     </tr>
                     <tr>
-                        <td colspan="1" style="font-size: 7pt;  border-color: #e3e3e3;border-left: 1px;"><b>Traslados</b></td>
+                        <td colspan="1" style="font-size: 7pt;  border-color: #e3e3e3;border-left: 1px; margin-right: 5px;"><b>Traslados</b></td>
                         <#if dataXML?has_content>
-                            <td align="right" colspan="1"
-                                style="font-size: 7pt;">${dataXML.Impuestos.atributos.TotalImpuestosTrasladados?number?string[",##0.00"]}</td>
+                            <td align="left" colspan="1"
+                                style="font-size: 7pt; margin-left: 10px;">$${dataXML.Impuestos.atributos.TotalImpuestosTrasladados?number?string[",##0.00"]}</td>
                         <#else>
                         <#if desglose_json_body?has_content>
                             <#assign "desglose_body" = desglose_json_body?eval>
                             <#assign "iva_total" = desglose_body.iva_total>
                             <#assign totalivaGBL = iva_total/>
                         </#if>
-                            <td align="right" colspan="1" style="font-size: 7pt;">${totalivaGBL?number?string[",##0.00"]}</td>
+                            <td align="left" colspan="1" style="font-size: 7pt; margin-left: 10px;">$${totalivaGBL?number?string[",##0.00"]}</td>
                         </#if>
                     </tr>
                     <#if dataXML?has_content>
@@ -1189,24 +1224,35 @@
                     </#if>
 
                     <tr>
-                        <td colspan="1" style="font-size: 7pt;  border-color: #e3e3e3;border-left: 1px;"><b>Retenciones</b></td>
+                        <td colspan="1" style="font-size: 7pt;  border-color: #e3e3e3;border-left: 1px; margin-right: 5px;"><b>Retenciones</b></td>
                         <#if dataXML?has_content>
-                            <td align="right" colspan="1"
-                                style="font-size: 7pt;">${dataXML.Impuestos.atributos.TotalImpuestosRetenidos?number?string[",##0.00"]}</td>
+                            <#if dataXML.Impuestos.atributos.TotalImpuestosRetenidos?has_content>
+                                <td align="left" colspan="1" style="font-size: 7pt; margin-left: 10px;">
+                                    $${dataXML.Impuestos.atributos.TotalImpuestosRetenidos?number?string[",##0.00"]}
+                                </td>
+                            <#else>
+                                <td align="left" colspan="1" style="font-size: 7pt; margin-left: 10px;">$0.00</td>
+                            </#if>
                         <#else>
-                            <td align="right" colspan="1"
-                                style="font-size: 7pt;">${retencion_total}</td>
+                            <#if retencion_total?has_content>
+                                <td align="left" colspan="1"
+                                    style="font-size: 7pt; margin-left: 10px;">$${retencion_total}</td>
+                            <#else>
+                                <td align="left" colspan="1"
+                                    style="font-size: 7pt; margin-left: 10px;">$0.00</td>
+
+                            </#if>
                         </#if>
                     </tr>
 
                     <tr>
-                        <td colspan="1" style="font-size: 7pt;  border-color: #e3e3e3;border-left: 1px;"><b>Total</b>
+                        <td colspan="1" style="font-size: 7pt;  border-color: #e3e3e3;border-left: 1px; margin-right: 5px;"><b>Total</b>
                         </td>
                         <#if dataXML?has_content>
-                            <td align="right" colspan="1" style="font-size: 7pt;">${dataXML.atributos.Total?number?string[",##0.00"]}</td>
+                            <td align="left" colspan="1" style="font-size: 7pt; margin-left: 10px;">$${dataXML.atributos.Total?number?string[",##0.00"]}</td>
                         <#else>
-                            <td align="right" colspan="1"
-                                style="font-size: 7pt;"><#if cabecera_total?has_content>${cabecera_total?number?string[",##0.00"]}</#if></td>
+                            <td align="left" colspan="1"
+                                style="font-size: 7pt; margin-left: 10px;"><#if cabecera_total?has_content>$${cabecera_total?number?string[",##0.00"]}</#if></td>
                         </#if>
 
                     </tr>
