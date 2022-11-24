@@ -210,7 +210,7 @@
             <tr>
                 <td class="address" colspan="14" rowspan="2" style="border: 1px; border-color: #e3e3e3;">
                     ${record.entity}<br/>
-                    ${record.billaddress?cap_first}<br/>
+                    ${record.billaddress?keep_after("<br />")}<br/>
                     RFC: ${record.custbody_mx_customer_rfc}<br/>
                     No. de Cliente: ${record.entity.entityid}
                 </td>
