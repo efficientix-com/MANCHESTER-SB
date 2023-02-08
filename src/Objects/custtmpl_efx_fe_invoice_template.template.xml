@@ -181,6 +181,10 @@
             </#if>
             }
 
+            table.testing *{
+                    /* TESTING */
+                    border: 1px solid red;
+            }
             table {
                 font-size: 9pt;
                 table-layout: fixed;
@@ -495,7 +499,7 @@
                         <th align="center" colspan="2"
                             style="font-size: 5pt; padding-left: 0px; padding-right: 0px;">Partida
                         </th>
-                        <th align="center" colspan="4" style="font-size: 5pt; padding-left: 0px; padding-right: 0px;">
+                        <th align="center" colspan="5" style="font-size: 5pt; padding-left: 0px; padding-right: 0px;">
                             SKU
                         </th>
                         <th align="center" colspan="5"
@@ -558,7 +562,9 @@
                 <#list record.item as item>
                     <#assign tipo_articulo = item.itemtype>
                     <#if tipo_articulo != "Discount">
-                        <#assign skuObj = skuObj + [item.item]>
+                        <#assign dato = item.item?keep_after(": ")>
+                        <#assign sku = dato?keep_before(" ")>
+                        <#assign skuObj = skuObj + [sku]>
                     </#if>
                 </#list>
 
@@ -764,10 +770,9 @@
 
                 <#assign skuObj = []>
                 <#list record.item as item>
-                    <#assign tipo_articulo = item.itemtype>
-                    <#if tipo_articulo != "Discount">
-                        <#assign skuObj = skuObj + [item.item]>
-                    </#if>
+                    <#assign dato = item.item?keep_after(": ")>
+                    <#assign sku = dato?keep_before(" ")>
+                    <#assign skuObj = skuObj + [sku]>
                 </#list>
                 <tr>
                     <td align="center" colspan="2" line-height="150%" style="border-left: 0px; border-color: #e3e3e3;font-size: 5pt; padding-top: 1px;">1
@@ -1153,19 +1158,19 @@
 
                     </tr>
                     <tr>
-                        <td colspan="1" style="font-size: 7pt;  border-color: #e3e3e3;border-left: 1px;">
+                        <td colspan="1" style="font-size: 7pt;  border-color: #e3e3e3; border-left: 1px;">
                             <b>Descuento</b></td>
                         <#if dataXML?has_content>
-                            <td align="right" colspan="1" style="font-size: 7pt;">$${dataXML.atributos.Descuento?number?string[",##0.00"]}</td>
+                            <td align="left" colspan="1" style="font-size: 7pt; margin-left: 10px;">$${dataXML.atributos.Descuento?number?string[",##0.00"]}</td>
                         <#else>
                             <#if descuento_total != 0>
-                                <td align="right" colspan="1"
-                                    style="font-size: 7pt;"><#if desglose_total_discount?has_content>$${desglose_total_discount?number?string[",##0.00"]}</#if></td>
+                                <td align="left" colspan="1"
+                                    style="font-size: 7pt; margin-left: 10px;"><#if desglose_total_discount?has_content>$${desglose_total_discount?number?string[",##0.00"]}</#if></td>
                             <#else>
                                 <#if record.discounttotal != 0>
-                                    <td align="right" colspan="1" style="font-size: 7pt;">$${record.discounttotal}</td>
+                                    <td align="left" colspan="1" style="font-size: 7pt; margin-left: 10px;">$${record.discounttotal}</td>
                                 <#else>
-                                    <td align="right" colspan="1" style="font-size: 7pt;">0.00</td>
+                                    <td align="left" colspan="1" style="font-size: 7pt; margin-left: 10px;">0.00</td>
                                 </#if>
                             </#if>
                         </#if>

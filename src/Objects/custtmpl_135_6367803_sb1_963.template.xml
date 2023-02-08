@@ -215,7 +215,10 @@
                     No. de Cliente: ${record.entity.entityid}
                 </td>
                 <td></td>
-                <td align="left" colspan="14" style="border: 1px; border-color: #e3e3e3;">${record.shipaddress} </td>
+                <#assign dir = record.shipaddress?keep_after("<br />")>
+                <#assign direccion = dir?keep_after("<br />")>
+
+                <td align="left" colspan="14" style="border: 1px; border-color: #e3e3e3;">${direccion} </td>
             </tr>
         </table>
 
@@ -245,12 +248,12 @@
                             <tr>
                                 <th align="left" colspan="2" style="font-size: 6pt;">P</th>
                                 <th colspan="4" style="font-size: 5pt;">Código</th>
-                                <th align="left" colspan="4" style="font-size: 5pt;">UPC</th>
-                                <th colspan="5" style="font-size: 5pt;">Código<br/>Clave</th>
+                                <th align="center" colspan="4" style="font-size: 5pt;">UPC</th>
+                                <th align="center" colspan="5" style="font-size: 5pt;">Código<br/>Clave</th>
                                 <th colspan="18" style="font-size: 5pt;">Descripción</th>
                                 <th align="center" colspan="3" style="font-size: 5pt;">Clave<br/>SAT</th>
                                 <th align="left" colspan="2" style="font-size: 5pt;">Unidad</th>
-                                <th align="left" colspan="4" style="font-size: 5pt;">Cant.</th>
+                                <th align="center" colspan="4" style="font-size: 5pt;">Cant.</th>
                                 <th align="center" colspan="4" style="font-size: 5pt;">Precio<br/>sin impuesto</th>
                                 <th align="left" colspan="4" style="font-size: 5pt;">Impuesto</th>
                                 <th align="left" colspan="4" style="font-size: 5pt;">Desc.</th>
@@ -266,7 +269,7 @@
                         <td align="center" colspan="2" line-height="150%" style="border-left: 1px; border-color: #e3e3e3;font-size: 5pt;">${item_index + 1}</td>
                         <td align="center" colspan="4" line-height="150%" style="border-left: 1px; border-color: #e3e3e3;font-size: 5pt;">${item.item?keep_before(" ")}</td>
                         <td colspan="4" style="border-left: 1px; border-color: #e3e3e3;font-size: 5pt;">${item.custcol_efx_fe_upc_code}</td>
-                        <td align="center" colspan="5" line-height="150%" style="border-left: 1px; border-color: #e3e3e3;font-size: 5pt;">${item.custcol_mx_txn_line_sat_item_code?keep_before(" ")}</td>
+                        <td align="center" colspan="5" line-height="150%" style="border-left: 1px; border-color: #e3e3e3;font-size: 5pt; border-right: 1px; border-color: #e3e3e3;font-size: 5pt; ">${item.custcol_mx_txn_line_sat_item_code?keep_before(" ")}</td>
 
                         <td colspan="18" style="margin: 0; padding: 0;">
                             <table>
@@ -298,7 +301,7 @@
 
                                                 <#if desglose.iva.name?has_content>
                                                     <tr>
-                                                        <td style="font-size: 5pt;">${desglose.iva.base}</td>
+                                                        <td style="font-size: 5pt;">${item.amount}</td>
                                                         <td style="font-size: 5pt;">${desglose.iva.name}</td>
                                                         <td style="font-size: 5pt;">${desglose.iva.factor}</td>
                                                         <td style="font-size: 5pt;">${desglose.iva.rate}%</td>
@@ -365,9 +368,9 @@
 
                         <td colspan="3" style="border-left: 1px; border-color: #e3e3e3;font-size: 5pt;">${units_sat}</td>
                         <td colspan="2" style="border-left: 1px; border-color: #e3e3e3;font-size: 5pt;">${item.units}</td>
-                        <td align="center" colspan="4" line-height="150%" style="border-left: 1px; border-color: #e3e3e3;font-size: 5pt;">${item.quantity}</td>
+                        <td align="center" colspan="4" line-height="150%" style="border-left: 1px; border-color: #e3e3e3;font-size: 5pt; border-right: 1px; border-color: #e3e3e3;font-size: 5pt;">${item.quantity}</td>
                         <td align="left" colspan="4" style="font-size: 5pt;">${item.rate}</td>
-                        <td colspan="4" style="border-left: 1px; border-color: #e3e3e3;font-size: 5pt;">${item.tax1amt}</td>
+                        <td colspan="4" style="border-left: 1px; border-color: #e3e3e3;font-size: 5pt;">${item.taxamount}</td>
                         <td colspan="4" style="border-left: 1px; border-color: #e3e3e3;font-size: 5pt;">${item.discount}</td>
                         <td align="right" colspan="4" style="border-left: 1px; border-color: #e3e3e3;font-size: 5pt;">${item.grossamt}</td>
                     </tr>
@@ -385,7 +388,7 @@
                     <#assign "desglose_loc" = desglose_body.rates_local>
                 </#if>
                 <tr>
-                    <td align="left" colspan="2" style="border-bottom: 1px; border-color: #e3e3e3; font-size: 7pt;"><strong>Cantidad con letra:</strong> ${record.custbody_efx_amount_in_words}</td>
+                    <td align="left" colspan="2" style="border-bottom: 1px; border-color: #e3e3e3; font-size: 7pt;"><strong>Cantidad con letra:</strong> ${record.custbody_efx_fe_total_text}</td>
                 </tr>
                 <tr>
                     <td align="left" style="font-size: 7pt;"><strong>Total de piezas: </strong>${total_piezas}</td>
